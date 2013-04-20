@@ -1,0 +1,38 @@
+soap = PAGE
+soap.typeNum = 1362726961
+soap.config {
+  disableAllHeaderCode = 1
+  additionalHeaders = Content-type:text/xml
+  xhtml_cleaning = 0
+  admPanel = 0
+}
+
+
+#
+#needs .htaccess rewrites
+#RewriteRule ^service/soap/(.*)\.wsdl /index.php?type=1362726961&tx_soap_pi1[wsdlUri]=$1 [P,L]
+#RewriteRule ^(service/soap/.*) /index.php/$1?type=1362726961 [P,L]
+#
+#so you can call your wsdl
+#http://<host>/service/soap/<vendor>/<package>/<service>.wsdl
+
+soap.20 = USER_INT
+soap.20 {
+   userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+   extensionName = Soap
+   vendorName = TYPO3\CMS
+   pluginName = Pi1
+   settings {
+   	generatorTemplate = EXT:soap/Resources/Private/Templates/Definitions.xml
+   	endpointUriBasePath = service/soap/
+   	exposeExceptionInformation = 1
+   }
+}
+
+config.tx_extbase {
+	mvc {
+		requestHandlers {
+			TYPO3\CMS\Soap\RequestHandler = TYPO3\CMS\Soap\RequestHandler
+		}
+	}
+}
